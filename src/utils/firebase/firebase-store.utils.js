@@ -104,7 +104,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   return userDocRef;
 };
 
-export const createQuizResultDocument = async (quizResult, userId) => {
+export const submitQuizResult = async (userId, quizResult) => {
   try {
     await addDoc(collection(db, `users/${userId}/quiz_results`), {
       ...quizResult

@@ -5,20 +5,44 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
 import { selectQuestionsByQuiz } from '../../store/questions/questions.selectors';
 import Question from '../../components/question/question.component';
+import { getQuizResultsByUser, submitQuizResult } from '../../utils/firebase/firebase-store.utils';
+import { selectCurrentUser } from '../../store/user/user.selectors';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
   const [ userQuizAnswers, setUserQuizAnswers ] = useState([]);
+  const [ isSubmitting, setIsSubmitting ] = useState(false);
   const dispatch = useDispatch();
   const questions = useSelector(state => selectQuestionsByQuiz(state, quizId));
+  const currentUser = useSelector(selectCurrentUser);
 
   useEffect(() => {
     dispatch(fetchQuestionsByCategoryAndQuizAsync(categoryId, quizId));
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('userQuizAnswers ', userQuizAnswers);
+
+    if(questions.length != userQuizAnswers.length) {
+      alert('Please, answer all questions to submit');
+      return;
+    }
+
+    const quizResult = {
+      quiz_id: quizId,
+      date: new Date().getTime(),
+      answers: userQuizAnswers
+    }
+
+    // console.log(currentUser);
+    try {
+      setIsSubmitting(true);
+      await submitQuizResult(currentUser.uid, quizResult);
+    } catch (error) {
+      alert(error); //TODO: add error handling
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const answerOnChangeHandler = (event) => {
