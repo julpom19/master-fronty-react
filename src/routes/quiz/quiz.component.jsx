@@ -22,7 +22,11 @@ const Quiz = () => {
   }
 
   const answerOnChangeHandler = (event) => {
-    console.log('event = ', event);
+    const { name, value } = event.target;
+    setUserQuizAnswers([...userQuizAnswers, {
+      question_id: name,
+      answer_id: value
+    }]);
   }
 
   return (

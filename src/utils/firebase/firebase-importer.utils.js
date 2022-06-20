@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore';
 import { initFirebaseApp } from './firebase.utils';
 import { CATEGORIES, QUESTIONS, QUIZZES } from './app-data';
+import { generateUniqueID } from 'web-vitals/dist/modules/lib/generateUniqueID';
 
 initFirebaseApp();
 export const db = getFirestore();
@@ -43,12 +44,8 @@ const loadQuizzes = async () => {
   await batch.commit();
 };
 
-const generateIdsForAnswers = () => {
-  
-}
-
 const loadQuestions = async () => {
-
+  generateIdsForAnswers();
   const batch = writeBatch(db);
 
   QUESTIONS.forEach(question => {
@@ -62,6 +59,29 @@ const loadQuestions = async () => {
 
   await batch.commit();
 }
+
+export const generateIdsForAnswers = () => {
+  const generatedIds = {};
+  QUESTIONS.forEach(question => {
+    question.answers.forEach(answer => {
+      let id;
+      do {
+        id = generateId();
+        if(!generatedIds[id]) {
+          generatedIds[id] = id;
+          break;
+        }
+      } while (true);
+      answer.id = id;
+    });
+  });
+  console.log(QUESTIONS);
+};
+
+const generateId = () => {
+  return Math.random().toString(16).slice(2);
+};
+
 
 const addCollectionObject = async (collectionKey, objectContainer) => {
   const collectionRef = collection(db, collectionKey);

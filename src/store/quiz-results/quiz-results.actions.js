@@ -19,4 +19,4 @@ export const fetchQuizResultsAsync = (userId) => async (dispatch) => {
   } catch (error) {
     dispatch(fetchQuizResultsFailed(error));
   }
-}
+};
