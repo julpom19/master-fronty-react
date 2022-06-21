@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Link } from 'react-router-dom';
-
 import { selectCategories } from '../../store/categories/categories.selectors';
 
 import CategoryCard from '../../components/category-card/category-card.component';
@@ -9,6 +7,7 @@ import CategoryCard from '../../components/category-card/category-card.component
 import './home.styles.scss';
 import { useEffect } from 'react';
 import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
+import { Container, Grid } from '@mui/material';
 
 
 const Home = () => {
@@ -20,16 +19,21 @@ const Home = () => {
   }, []);
 
   const renderedCategories = categories.map(category => (
-    <li key={category.id}>
+    <Grid item md={3} sm={4} xs={6} key={category.id}>
       <CategoryCard category={category} />
-    </li>
+    </Grid>
   ));
+
   return (
-    <div>
-      <ul>
+    <Container>
+      <Grid
+        container
+        spacing={2}
+        justifyContent={'center'}
+      >
         {renderedCategories}
-      </ul>
-    </div>
+      </Grid>
+    </Container>
   );
 }
 

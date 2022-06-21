@@ -11,7 +11,6 @@ import { useEffect } from 'react';
 import { onAuthStateChangedListener } from './utils/firebase/firebase-auth.utils';
 import { createUserDocumentFromAuth } from './utils/firebase/firebase-store.utils';
 import { setCurrentUser } from './store/user/user.actions';
-import { loadDataToFirestore } from './utils/firebase/firebase-importer.utils';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -31,16 +30,17 @@ const App = () => {
     // loadDataToFirestore();
   }, []);
   return (
-    <Routes>
-      <Route path="/" element={<Header />} >
-        <Route index element={<Home />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="auth" element={<Authentication />} />
-        <Route path="result/:quizResultId" element={<QuizResult />} />
-        <Route path=":categoryId" element={<Category />} />
-        <Route path=":categoryId/:quizId" element={<Quiz />} />
-      </Route>
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Header />} >
+
+          <Route index element={<Home />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="auth" element={<Authentication />} />
+          <Route path="result/:userId/:quizResultId" element={<QuizResult />} />
+          <Route path=":categoryId" element={<Category />} />
+          <Route path=":categoryId/:quizId" element={<Quiz />} />
+        </Route>
+      </Routes>
   );
 }
 

@@ -9,3 +9,16 @@ export const selectQuizzesByCategory = createSelector(
   ],
   (quizzesSlice, categoryId) => quizzesSlice.quizzesByCategories[categoryId]
 );
+
+export const selectQuizById = createSelector(
+  [
+    selectQuizzesReducer,
+    (state, quizId) => quizId
+  ],
+  (quizzesSlice, quizId) => {
+    for(const quizzes of Object.values(quizzesSlice.quizzesByCategories)) {
+      const quiz = quizzes.find(quiz => quiz.id === quizId);
+      if(quiz) return quiz;
+    }
+  }
+);

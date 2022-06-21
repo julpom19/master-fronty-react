@@ -1,24 +1,45 @@
 import './quiz.styles.scss';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
 import { selectQuestionsByQuiz } from '../../store/questions/questions.selectors';
 import Question from '../../components/question/question.component';
-import { getQuizResultsByUser, submitQuizResult } from '../../utils/firebase/firebase-store.utils';
 import { selectCurrentUser } from '../../store/user/user.selectors';
+import { submitQuizResultAsync } from '../../store/quiz-result/quiz-result.actions';
+import {
+  selectIsQuizResultSubmitting,
+  selectQuizResult,
+  selectQuizResultError,
+} from '../../store/quiz-result/quiz-result.selectors';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
   const [ userQuizAnswers, setUserQuizAnswers ] = useState([]);
-  const [ isSubmitting, setIsSubmitting ] = useState(false);
+  const [ isQuizResultDispatched, setIsQuizResultDispatched ] = useState(false);
   const dispatch = useDispatch();
   const questions = useSelector(state => selectQuestionsByQuiz(state, quizId));
   const currentUser = useSelector(selectCurrentUser);
+  const isQuizResultSubmitting = useSelector(selectIsQuizResultSubmitting);
+  const quizResult = useSelector(selectQuizResult);
+  const quizResultError = useSelector(selectQuizResultError);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchQuestionsByCategoryAndQuizAsync(categoryId, quizId));
   }, []);
+
+  useEffect(() => {
+    if(!isQuizResultSubmitting && isQuizResultDispatched) {
+      setIsQuizResultDispatched(false);
+      if(quizResultError) {
+        //TODO: handle error
+      } else {
+        navigate(`/result/${currentUser.uid}/${quizResult.id}`);
+      }
+    }
+  }, [isQuizResultSubmitting, isQuizResultDispatched]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,28 +49,22 @@ const Quiz = () => {
       return;
     }
 
-    const quizResult = {
-      quiz_id: quizId,
+    let quizResult = {
+      quizId,
+      categoryId,
       date: new Date().getTime(),
       answers: userQuizAnswers
     }
 
-    // console.log(currentUser);
-    try {
-      setIsSubmitting(true);
-      await submitQuizResult(currentUser.uid, quizResult);
-    } catch (error) {
-      alert(error); //TODO: add error handling
-    } finally {
-      setIsSubmitting(false);
-    }
+    setIsQuizResultDispatched(true);
+    dispatch(submitQuizResultAsync(currentUser.uid, quizResult));
   }
 
   const answerOnChangeHandler = (event) => {
     const { name, value } = event.target;
     setUserQuizAnswers([...userQuizAnswers, {
-      question_id: name,
-      answer_id: value
+      questionId: name,
+      answerId: value
     }]);
   }
 

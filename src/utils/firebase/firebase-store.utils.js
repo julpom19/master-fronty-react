@@ -25,15 +25,19 @@ export const getCategories = async () => {
 const getCategoriesFromDocs = (docs) => {
   return docs
           .reduce((acc, docSnapshot) => {
-            const { title, icon } = docSnapshot.data();
-            const id = docSnapshot.id;
-            acc.push({
-              id,
-              title,
-              icon
-            });
+            acc.push(getCategoryFromDocSnapshot(docSnapshot));
             return acc;
           }, []);
+};
+
+const getCategoryFromDocSnapshot = (docSnapshot) => {
+  const { title, icon } = docSnapshot.data();
+  const id = docSnapshot.id;
+  return {
+    id,
+    title,
+    icon
+  };
 };
 
 export const getQuizzesByCategory = async (categoryId) => {
@@ -47,15 +51,19 @@ export const getQuizzesByCategory = async (categoryId) => {
 const getQuizzesFromDocs = (docs) => {
   return docs
     .reduce((acc, docSnapshot) => {
-      const { title } = docSnapshot.data();
-      const id = docSnapshot.id;
-      acc.push({
-        id,
-        title
-      });
+      acc.push(getQuizFromDocSnapshot(docSnapshot));
       return acc;
     }, []);
 };
+
+const getQuizFromDocSnapshot = (docSnapshot) => {
+  const { title } = docSnapshot.data();
+  const id = docSnapshot.id;
+  return {
+    id,
+    title
+  };
+}
 
 export const getQuestionsByCategoryAndQuiz = async (categoryId, quizId) => {
   const collectionRef = collection(db, `categories/${categoryId}/quizzes/${quizId}/questions`);
@@ -68,16 +76,20 @@ export const getQuestionsByCategoryAndQuiz = async (categoryId, quizId) => {
 const getQuestionsFromDocs = (docs) => {
   return docs
     .reduce((acc, docSnapshot) => {
-      const { content, answers} = docSnapshot.data();
-      const id = docSnapshot.id;
-      acc.push({
-        id,
-        content,
-        answers
-      });
+      acc.push(getQuestionFromDocSnapshot(docSnapshot));
       return acc;
     }, []);
 };
+
+const getQuestionFromDocSnapshot = (docSnapshot) => {
+  const { content, answers} = docSnapshot.data();
+  const id = docSnapshot.id;
+  return {
+    id,
+    content,
+    answers
+  };
+}
 
 export const createUserDocumentFromAuth = async (userAuth) => {
   if(!userAuth) return;
@@ -106,10 +118,11 @@ export const createUserDocumentFromAuth = async (userAuth) => {
 
 export const submitQuizResult = async (userId, quizResult) => {
   try {
-    await addDoc(collection(db, `users/${userId}/quiz_results`), {
+    const docRef = await addDoc(collection(db, `users/${userId}/quiz_results`), {
       ...quizResult
     });
-    return Promise.resolve();
+    const docSnapshot = await getDoc(docRef);
+    return getQuizResultFromDocSnapshot(docSnapshot);
   } catch (error) {
     console.log('error storing quiz result', error.message);
   }
@@ -123,16 +136,45 @@ export const getQuizResultsByUser = async (userId) => {
   return getQuizResultsFromDocs(querySnapshot.docs);
 };
 
+export const getQuizResultByUser = async (userId, quizResultId) => {
+  const docRef = doc(db, `users/${userId}/quiz_results`, quizResultId);
+  const docSnapshot = await getDoc(docRef);
+
+  return getQuizResultFromDocSnapshot(docSnapshot);
+};
+
+const getQuizResultFromDocSnapshot = (docSnapshot) => {
+  const { date, answers, quizId, categoryId} = docSnapshot.data();
+  const id = docSnapshot.id;
+  return {
+    id,
+    date,
+    answers,
+    quizId,
+    categoryId
+  }
+}
+
+export const getQuiz = async (categoryId, quizId) => {
+  const docRef = doc(db, `categories/${categoryId}/quizzes`, quizId);
+  const docSnapshot = await getDoc(docRef);
+
+  return getQuizFromDocSnapshot(docSnapshot);
+};
+
+export const getQuestions = async (categoryId, quizId) => {
+  const docRef = doc(db, `categories/${categoryId}/quizzes`, quizId);
+  const docSnapshot = await getDoc(docRef);
+
+  return getQuizFromDocSnapshot(docSnapshot);
+};
+
+//TODO: add layer/helper that creates objects from docs
+
 const getQuizResultsFromDocs = (docs) => {
   return docs
     .reduce((acc, docSnapshot) => {
-      const { timestamp, answers} = docSnapshot.data();
-      const id = docSnapshot.id;
-      acc.push({
-        id,
-        timestamp,
-        answers
-      });
+      acc.push(getQuizResultFromDocSnapshot(docSnapshot));
       return acc;
     }, []);
 };

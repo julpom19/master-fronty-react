@@ -1,41 +1,7 @@
 import QUIZZES_ACTION_TYPES from './quizzes.types';
 
-const QUIZ_TYPE = {
-  RANDOM: 'RANDOM',
-  DEFINED: 'DEFINED'
-};
-
 const INITIAL_STATE = {
-  quizzesByCategories: {
-    // 'js': [
-    //   {
-    //     id: 1,
-    //     category_id: 1,
-    //     title: 'JS BASIC',
-    //     description: 'Questions about types, functions, objects',
-    //     quiz_type: QUIZ_TYPE.DEFINED,
-    //     showable: true
-    //   },
-    //   {
-    //     id: 2,
-    //     category_id: 1,
-    //     title: 'JS ADVANCED',
-    //     description: 'Questions about prototypes, classes',
-    //     quiz_type: QUIZ_TYPE.DEFINED,
-    //     showable: true
-    //   },
-    // ],
-    // 'css': [
-    //   {
-    //     id: 3,
-    //     category_id: 2,
-    //     title: 'CSS BASIC',
-    //     description: 'Questions about selectors',
-    //     quiz_type: QUIZ_TYPE.DEFINED,
-    //     showable: true
-    //   }
-    // ]
-  },
+  quizzesByCategories: {},
   isLoading: false,
   error: null
 };

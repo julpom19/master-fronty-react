@@ -5,9 +5,9 @@ import { getQuestionsByCategoryAndQuiz } from '../../utils/firebase/firebase-sto
 const fetchQuestionsByQuizStart = () =>
   createAction(QUESTIONS_ACTION_TYPES.FETCH_QUESTIONS_BY_QUIZ_START);
 
-const fetchQuestionsByQuizSuccess = (questions, quiz_id) =>
+const fetchQuestionsByQuizSuccess = (questions, quizId) =>
   createAction(QUESTIONS_ACTION_TYPES.FETCH_QUESTIONS_BY_QUIZ_SUCCESS, {
-    [quiz_id]: questions
+    [quizId]: questions
   });
 
 const fetchQuestionsByQuizFailed = (error) =>

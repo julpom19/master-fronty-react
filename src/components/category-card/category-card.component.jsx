@@ -1,12 +1,21 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Card } from '@mui/material';
+import './category-card.styles.scss';
 
 const CategoryCard = ({ category }) => {
+  const navigate = useNavigate();
+  const handleCardClick = () => {
+    navigate(`/${category.id}`);
+  }
   return (
-    <Link to={`/${category.id}`}>
+    <Card
+      onClick={handleCardClick}
+      className='category-card'
+    >
       <div>
         {category.title}
       </div>
-    </Link>
+    </Card>
   );
 };
 

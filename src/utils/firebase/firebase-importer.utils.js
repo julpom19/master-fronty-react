@@ -1,17 +1,11 @@
 import {
   getFirestore,
   collection,
-  query,
-  getDocs,
   doc,
-  getDoc,
-  setDoc,
-  addDoc,
   writeBatch
 } from 'firebase/firestore';
 import { initFirebaseApp } from './firebase.utils';
 import { CATEGORIES, QUESTIONS, QUIZZES } from './app-data';
-import { generateUniqueID } from 'web-vitals/dist/modules/lib/generateUniqueID';
 
 initFirebaseApp();
 export const db = getFirestore();
@@ -35,10 +29,10 @@ const loadQuizzes = async () => {
   const batch = writeBatch(db);
 
   Object.entries(QUIZZES).forEach(([quizId, quizObject]) => {
-    const collectionRef = collection(db, `categories/${quizObject.category_id}/quizzes`);
+    const collectionRef = collection(db, `categories/${quizObject.categoryId}/quizzes`);
     const docRef = doc(collectionRef, quizId);
     quizObject = {...quizObject};
-    delete quizObject.category_id;
+    delete quizObject.categoryId;
     batch.set(docRef, quizObject);
   });
   await batch.commit();
@@ -49,11 +43,11 @@ const loadQuestions = async () => {
   const batch = writeBatch(db);
 
   QUESTIONS.forEach(question => {
-    const collectionRef = collection(db, `categories/${question.category_id}/quizzes/${question.quiz_id}/questions`);
+    const collectionRef = collection(db, `categories/${question.categoryId}/quizzes/${question.quizId}/questions`);
     const docRef = doc(collectionRef);
     question = {...question};
-    delete question.category_id;
-    delete question.quiz_id;
+    delete question.categoryId;
+    delete question.quizId;
     batch.set(docRef, question);
   });
 
