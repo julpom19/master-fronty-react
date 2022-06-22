@@ -1,3 +1,14 @@
 .category-card {
   cursor: pointer;
+  //transition: transform 1s ease;
+}
+
+.category-card:hover {
+  //transform: scale(1.1, 1.1);
+}
+
+.test {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
 }

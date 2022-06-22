@@ -1,41 +1,28 @@
 import './header.styles.scss';
-import { Link, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../store/user/user.selectors';
-import { signInWithGooglePopup, signOutUser } from '../../utils/firebase/firebase-auth.utils';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import {
+  AppBar,
+  Toolbar,
+} from '@mui/material';
+import logo from '../../assets/logo-master-fronty.png';
+import UserAvatar from '../../components/user-avatar/user-avatar.component';
 
 const Header = () => {
-  const currentUser = useSelector(selectCurrentUser);
-  const signOutHandler = async () => {
-    await signOutUser();
-  };
-  const signInHandler = async () => {
-    await signInWithGooglePopup();
-  };
   return (
     <>
-      <div className="header">
-        <Link to="/">
-          <div className="logo">LOGO</div>
-        </Link>
-        {
-          currentUser ? (
-            <span onClick={signOutHandler}>
-              SIGN OUT
-            </span>
-          ) : (
-            <span onClick={signInHandler}>
-              SIGN IN
-            </span>
-          )
-        }
-        {/*<Link to="/auth">*/}
-        {/*  <div className="profile">SIGN IN</div>*/}
-        {/*</Link>*/}
-        <Link to="/profile">
-          <div className="profile">PROFILE ICON</div>
-        </Link>
-      </div>
+      <AppBar position="sticky">
+        <Toolbar
+          sx={{
+            justifyContent: 'space-between',
+            backgroundColor: 'white' //TODO: color
+          }}
+        >
+          <Link to="/">
+            <img src={logo} width="100"/>
+          </Link>
+          <UserAvatar/>
+        </Toolbar>
+      </AppBar>
       <Outlet />
     </>
   );

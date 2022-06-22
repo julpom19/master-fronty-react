@@ -11,6 +11,8 @@ import { useEffect } from 'react';
 import { onAuthStateChangedListener } from './utils/firebase/firebase-auth.utils';
 import { createUserDocumentFromAuth } from './utils/firebase/firebase-store.utils';
 import { setCurrentUser } from './store/user/user.actions';
+import Footer from './components/footer/footer.component';
+import { Box, Grid } from '@mui/material';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,17 +32,26 @@ const App = () => {
     // loadDataToFirestore();
   }, []);
   return (
-      <Routes>
-        <Route path="/" element={<Header />} >
-
-          <Route index element={<Home />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="auth" element={<Authentication />} />
-          <Route path="result/:userId/:quizResultId" element={<QuizResult />} />
-          <Route path=":categoryId" element={<Category />} />
-          <Route path=":categoryId/:quizId" element={<Quiz />} />
-        </Route>
-      </Routes>
+    <Grid
+      container
+      justifyContent="space-between"
+      flexDirection="column"
+      sx={{minHeight: "100vh"}}
+    >
+      <Box>
+        <Routes>
+          <Route path="/" element={<Header />} >
+            <Route index element={<Home />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="auth" element={<Authentication />} />
+            <Route path="result/:userId/:quizResultId" element={<QuizResult />} />
+            <Route path=":categoryId" element={<Category />} />
+            <Route path=":categoryId/:quizId" element={<Quiz />} />
+          </Route>
+        </Routes>
+      </Box>
+      <Footer />
+    </Grid>
   );
 }
 
