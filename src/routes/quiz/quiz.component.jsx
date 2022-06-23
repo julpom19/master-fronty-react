@@ -1,5 +1,5 @@
 import './quiz.styles.scss';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
@@ -12,23 +12,36 @@ import {
   selectQuizResult,
   selectQuizResultError,
 } from '../../store/quiz-result/quiz-result.selectors';
+import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
+import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
+import { Button, Container, Typography } from '@mui/material';
+import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
   const [ userQuizAnswers, setUserQuizAnswers ] = useState([]);
   const [ isQuizResultDispatched, setIsQuizResultDispatched ] = useState(false);
+  const [ currentQuestionNum, setCurrentQuestionNum ] = useState(1);
+  const [ questions, setQuestions ] = useState([]);
   const dispatch = useDispatch();
-  const questions = useSelector(state => selectQuestionsByQuiz(state, quizId));
+  const questionsFromState = useSelector(state => selectQuestionsByQuiz(state, quizId));
   const currentUser = useSelector(selectCurrentUser);
   const isQuizResultSubmitting = useSelector(selectIsQuizResultSubmitting);
   const quizResult = useSelector(selectQuizResult);
   const quizResultError = useSelector(selectQuizResultError);
+  const quiz = useSelector(state => selectQuizById(state, quizId));
 
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchQuestionsByCategoryAndQuizAsync(categoryId, quizId));
+    dispatch(fetchCategoriesAsync());
+    dispatch(fetchQuizzesByCategoryAsync(categoryId));
   }, []);
+
+  useEffect(() => {
+    setQuestions(questionsFromState.map(q => ({...q, selectedAnswerId: null})));
+  }, [questionsFromState]);
 
   useEffect(() => {
     if(!isQuizResultSubmitting && isQuizResultDispatched) {
@@ -41,7 +54,7 @@ const Quiz = () => {
     }
   }, [isQuizResultSubmitting, isQuizResultDispatched]);
 
-  const handleSubmit = async (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
 
     if(questions.length != userQuizAnswers.length) {
@@ -62,39 +75,83 @@ const Quiz = () => {
 
   const answerOnChangeHandler = (event) => {
     const { name, value } = event.target;
-    setUserQuizAnswers([...userQuizAnswers, {
-      questionId: name,
-      answerId: value
-    }]);
-  }
+    addUserQuizAnswer(name, value);
+    addAnswerToQuestions(name, value);
+  };
+
+  const addUserQuizAnswer = (questionId, answerId) => {
+    let previousAnswer = userQuizAnswers.find(a => a.questionId === questionId);
+    if(previousAnswer) {
+      setUserQuizAnswers(userQuizAnswers.map(a =>
+        a.questionId === questionId ? {
+          questionId,
+          answerId
+        } : a));
+    } else {
+      setUserQuizAnswers([...userQuizAnswers, {
+        questionId,
+        answerId
+      }]);
+    }
+  };
+
+  const addAnswerToQuestions = (questionId, answerId) => {
+    setQuestions(questions.map(q =>
+      q.id === questionId ? {
+        ...q,
+        selectedAnswerId: answerId
+      } : q));
+  };
+
+  const nextOnClickHandler = () => {
+    setCurrentQuestionNum(currentQuestionNum + 1);
+  };
+
+  const backOnClickHandler = () => {
+    setCurrentQuestionNum(currentQuestionNum - 1);
+  };
 
   return (
-    <div>
-      <h3>Quiz {quizId}</h3>
-      <form onSubmit={handleSubmit}>
-        <ul>
-          {
-            questions.map(q =>
-              <Question
-                key={q.id}
-                question={q}
-                answerOnChangeHandler={answerOnChangeHandler}
-              />)
-          }
-        </ul>
-        <button type='submit'>
-          SUBMIT
-        </button>
+    <Container>
+      <Typography variant="h4" mt={2}>{quiz?.title} Quiz</Typography>
+      <Typography variant="h5" mt={2} mb={2}>Question {currentQuestionNum} of {questions?.length}</Typography>
+      <form >
+        {
+          questions[currentQuestionNum - 1] && <Question
+            key={questions[currentQuestionNum - 1].id}
+            question={questions[currentQuestionNum - 1]}
+            answerOnChangeHandler={answerOnChangeHandler}
+          />
+        }
+        <Button
+          variant='contained'
+          onClick={backOnClickHandler}
+          sx={{marginRight: '20px'}}
+          disabled={currentQuestionNum === 1}
+        >
+          BACK
+        </Button>
+        {
+          currentQuestionNum === questions.length ? (
+            <Button
+              onClick={onSubmitHandler}
+              variant='contained'
+              disabled={userQuizAnswers.length < questions.length || isQuizResultSubmitting}
+            >
+              SUBMIT
+            </Button>
+          ) : (
+            <Button
+              variant='contained'
+              onClick={nextOnClickHandler}
+              disabled={currentQuestionNum > userQuizAnswers.length}
+            >
+              NEXT
+            </Button>
+          )
+        }
       </form>
-      <div>
-        <Link to={`/${categoryId}`}>
-          <h3>CANCEL</h3>
-        </Link>
-        {/*<Link to={`/result/${quizId}`}>*/}
-        {/*  <h3>SUBMIT</h3>*/}
-        {/*</Link>*/}
-      </div>
-    </div>
+    </Container>
   );
 }
 

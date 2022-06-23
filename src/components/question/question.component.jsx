@@ -1,22 +1,25 @@
 import './qestion.styles.scss';
+import {
+  Paper,
+  Typography,
+  RadioGroup,
+  FormControlLabel,
+  Radio
+} from '@mui/material';
 
 const Question = ({ question, answerOnChangeHandler }) => {
-
   const listOfAnswers = question.answers.map(a => (
-      <li key={a.id}>
-        <input type="radio" value={a.id} name={question.id} onChange={answerOnChangeHandler}/>
-        {a.content}
-      </li>
+      <FormControlLabel key={a.id} control={<Radio />} label={a.content} value={a.id} />
     )
   );
 
   return (
-    <li key={question.id}>
-      <div>{question.content}</div>
-      <ol>
+    <Paper key={question.id} sx={{padding: '20px', margin: '20px 0'}} elevation={3}>
+      <Typography variant="h6">{question.content}</Typography>
+      <RadioGroup name={question.id} onChange={answerOnChangeHandler} value={question.selectedAnswerId}>
         {listOfAnswers}
-      </ol>
-    </li>
+      </RadioGroup>
+    </Paper>
   );
 };
 
