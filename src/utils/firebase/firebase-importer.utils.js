@@ -69,7 +69,6 @@ export const generateIdsForAnswers = () => {
       answer.id = id;
     });
   });
-  console.log(QUESTIONS);
 };
 
 const generateId = () => {

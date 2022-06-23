@@ -13,6 +13,7 @@ import { createUserDocumentFromAuth } from './utils/firebase/firebase-store.util
 import { setCurrentUser } from './store/user/user.actions';
 import Footer from './components/footer/footer.component';
 import { Box, Grid } from '@mui/material';
+import { routes } from './routes/routes';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -41,12 +42,9 @@ const App = () => {
       <Box>
         <Routes>
           <Route path="/" element={<Header />} >
-            <Route index element={<Home />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="auth" element={<Authentication />} />
-            <Route path="result/:userId/:quizResultId" element={<QuizResult />} />
-            <Route path=":categoryId" element={<Category />} />
-            <Route path=":categoryId/:quizId" element={<Quiz />} />
+            {routes.map(route =>
+              <Route path={route.path} element={route.element} key={route.path}/>
+            )}
           </Route>
         </Routes>
       </Box>

@@ -17,7 +17,6 @@ const quizResultReducer = (state = INITIAL_STATE, action = {}) => {
         isSubmitting: true
       };
     case QUIZ_RESULT_ACTION_TYPES.SUBMIT_QUIZ_RESULT_SUCCESS:
-      console.log('payload = ', payload);
       return {
         ...state,
         quizResult: {...payload},

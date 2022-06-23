@@ -32,7 +32,6 @@ const Home = () => {
       <Grid
         container
         spacing={2}
-        justifyContent={'space-evenly'}
         mt={1}
       >
         {renderedCategories}
