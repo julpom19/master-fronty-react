@@ -16,6 +16,8 @@ import { fetchCategoriesAsync } from '../../store/categories/categories.actions'
 import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
 import { Button, Container, Typography } from '@mui/material';
 import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
+import { useCallbackPrompt } from '../../hooks/useCallbackPrompt';
+import ConfirmQuitDialog from '../../components/confirm-quit-dialog.component';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
@@ -23,6 +25,7 @@ const Quiz = () => {
   const [ isQuizResultDispatched, setIsQuizResultDispatched ] = useState(false);
   const [ currentQuestionNum, setCurrentQuestionNum ] = useState(1);
   const [ questions, setQuestions ] = useState([]);
+  const [ preventPageLeave, setPreventPageLeave ] = useState(false);
   const dispatch = useDispatch();
   const questionsFromState = useSelector(state => selectQuestionsByQuiz(state, quizId));
   const currentUser = useSelector(selectCurrentUser);
@@ -31,7 +34,11 @@ const Quiz = () => {
   const quizResultError = useSelector(selectQuizResultError);
   const quiz = useSelector(state => selectQuizById(state, quizId));
 
+
   const navigate = useNavigate();
+
+  const [showPrompt, confirmNavigation, cancelNavigation] =
+    useCallbackPrompt(preventPageLeave);
 
   useEffect(() => {
     dispatch(fetchQuestionsByCategoryAndQuizAsync(categoryId, quizId));
@@ -56,6 +63,7 @@ const Quiz = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    setPreventPageLeave(false);
 
     if(questions.length != userQuizAnswers.length) {
       alert('Please, answer all questions to submit');
@@ -77,6 +85,7 @@ const Quiz = () => {
     const { name, value } = event.target;
     addUserQuizAnswer(name, value);
     addAnswerToQuestions(name, value);
+    setPreventPageLeave(true);
   };
 
   const addUserQuizAnswer = (questionId, answerId) => {
@@ -151,6 +160,11 @@ const Quiz = () => {
           )
         }
       </form>
+      <ConfirmQuitDialog
+        showDialog={showPrompt}
+        confirmNavigation={confirmNavigation}
+        cancelNavigation={cancelNavigation}
+        />
     </Container>
   );
 }

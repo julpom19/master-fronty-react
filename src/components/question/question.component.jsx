@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   Radio
 } from '@mui/material';
+import { CodeBlock } from 'react-code-blocks';
 
 const Question = ({ question, answerOnChangeHandler }) => {
   const listOfAnswers = question.answers.map(a => (
@@ -19,6 +20,11 @@ const Question = ({ question, answerOnChangeHandler }) => {
       <RadioGroup name={question.id} onChange={answerOnChangeHandler} value={question.selectedAnswerId}>
         {listOfAnswers}
       </RadioGroup>
+      {/*<CodeBlock*/}
+      {/*  text={code}*/}
+      {/*  language={'jsx'}*/}
+      {/*  showLineNumbers={false}*/}
+      {/*/>*/}
     </Paper>
   );
 };
