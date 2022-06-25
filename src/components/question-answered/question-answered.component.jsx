@@ -1,11 +1,10 @@
 import './question-answered.styles.scss';
+import { Chip, Divider, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
+import { Fragment } from 'react';
 
-const QuestionAnswered = ({ questionAnswered }) => {
+const QuestionAnswered = ({ questionAnswered, questionIndex }) => {
   questionAnswered.answers.forEach(a => {
     let className = '';
-    if(a.isCorrect) {
-      className = 'correct';
-    }
     if(a.isSelectedByUser) {
       if(a.isCorrect) {
         className += ' correctly-answered';
@@ -17,19 +16,24 @@ const QuestionAnswered = ({ questionAnswered }) => {
   });
 
   const listOfAnswers = questionAnswered.answers.map(a => (
-      <li key={a.id} className='answer'>
-        <div className={a.className}>{a.content}</div>
-      </li>
+      <Fragment key={a.id}>
+        <Divider />
+        <ListItem sx={{display: 'flex', justifyContent: 'spaceBetween'}} className={a.className}>
+          <ListItemText>{a.content}</ListItemText>
+          {a.isCorrect && <Chip label="Correct answer" />}
+        </ListItem>
+      </Fragment>
     )
   );
 
   return (
-    <li key={questionAnswered.id}>
-      <div>{questionAnswered.content}</div>
-      <ol>
+    <Paper key={questionAnswered.id} sx={{padding: '20px', margin: '20px 0'}} elevation={3}>
+      <Typography variant="h6">{questionIndex + 1}. {questionAnswered.content}</Typography>
+      <List>
         {listOfAnswers}
-      </ol>
-    </li>
+        <Divider />
+      </List>
+    </Paper>
   );
 }
 export default QuestionAnswered;

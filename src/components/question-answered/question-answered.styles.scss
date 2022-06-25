@@ -1,13 +1,7 @@
-.answer {
-  .correct {
-    border: solid 3px green;
-  }
+.correctly-answered {
+  background-color: rgba(143, 188, 143, 0.5);
+}
 
-  .correctly-answered {
-    background-color: darkseagreen;
-  }
-
-  .wrongly-answered {
-    background-color: #ee7f7f;
-  }
+.wrongly-answered {
+  background-color: rgba(238, 127, 127, 0.5);
 }

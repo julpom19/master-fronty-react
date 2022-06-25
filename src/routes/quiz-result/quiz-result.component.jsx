@@ -8,9 +8,10 @@ import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
 import { selectQuestionsByQuiz } from '../../store/questions/questions.selectors';
 import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
 import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
-import Question from '../../components/question/question.component';
 import QuestionAnswered from '../../components/question-answered/question-answered.component';
-import { getQuestionsAnswered, getQuizAnswered } from '../../utils/questions.utils';
+import { calculateCorrectAnswersAmount, getQuestionsAnswered } from '../../utils/questions.utils';
+import { Chip, Container, Grid, Paper, Typography } from '@mui/material';
+import ScoreStars from '../../components/score-stars.component';
 
 const QuizResult = () => {
   const quizResult = useSelector(selectQuizResult);
@@ -19,6 +20,7 @@ const QuizResult = () => {
   const quiz = useSelector(state => selectQuizById(state, quizResult?.quizId));
   const questions = useSelector(state => selectQuestionsByQuiz(state, quizResult?.quizId));
   const [ questionsAnswered, setQuestionsAnswered ] = useState([]);
+  const [ amountOfCorrectAnswers, setAmountOfCorrectAnswers ] = useState(0);
 
   useEffect(() => {
     if(!quizResult?.id) {
@@ -41,27 +43,42 @@ const QuizResult = () => {
     if(quizResult?.id && questions.length > 0) {
       setQuestionsAnswered(getQuestionsAnswered(questions, quizResult.answers));
     }
-  }, [questions, quizResult])
+  }, [questions, quizResult]);
+
+  useEffect(() => {
+    if(questionsAnswered.length > 0) {
+      const res = calculateCorrectAnswersAmount(questionsAnswered);
+      setAmountOfCorrectAnswers(res);
+    }
+  }, [questionsAnswered]);
 
   return (
-    <div>
+    <Container>
       {
-        quiz && questions && (
+        questionsAnswered.length > 0 && (
           <>
-            <h3>RESULT Quiz {quiz.title}</h3>
-            <ul>
-              {
-                questionsAnswered.map(q =>
-                  <QuestionAnswered
-                    key={q.id}
-                    questionAnswered={q}
-                  />)
-              }
-            </ul>
+            <Grid container justifyContent="space-between" alignContent="center">
+              <Grid item>
+                <Typography variant="h3" mt={3}>{quiz.title} Quiz Result</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h6" mt={3}>Score: {amountOfCorrectAnswers} of {questionsAnswered.length}</Typography>
+                <ScoreStars correctAmount={amountOfCorrectAnswers} totalAmount={questionsAnswered.length} />
+              </Grid>
+            </Grid>
+
+            {
+              questionsAnswered.map((q, index) =>
+                <QuestionAnswered
+                  key={q.id}
+                  questionAnswered={q}
+                  questionIndex={index}
+                />)
+            }
           </>
         )
       }
-    </div>
+    </Container>
   );
 }
 
