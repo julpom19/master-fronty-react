@@ -8,5 +8,5 @@ export const selectQuizResults = createSelector(
     selectQuizResultsReducer,
     selectCurrentUser
   ],
-  (quizResultsSlice) => quizResultsSlice.quizResults
+  (quizResultsSlice) => quizResultsSlice.quizResults || []
 );
