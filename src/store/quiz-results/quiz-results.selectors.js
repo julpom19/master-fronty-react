@@ -10,3 +10,8 @@ export const selectQuizResults = createSelector(
   ],
   (quizResultsSlice) => quizResultsSlice.quizResults || []
 );
+
+export const selectQuizResultsLoading = createSelector(
+  [selectQuizResultsReducer],
+  (quizResultsSlice) => quizResultsSlice.isLoading
+);

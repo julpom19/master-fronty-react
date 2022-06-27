@@ -24,14 +24,14 @@ const UserAvatar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const navigateToProfilePage = () => {
+  const navigateToQuizResultsPage = () => {
     handleCloseUserMenu();
-    navigate('/profile');
+    navigate('/quiz-results');
   };
   const settings = [
     {
-      title: 'Profile',
-      onClickHandler: navigateToProfilePage,
+      title: 'Quiz Results',
+      onClickHandler: navigateToQuizResultsPage,
     },{
       title: 'Logout',
       onClickHandler: signOutHandler,

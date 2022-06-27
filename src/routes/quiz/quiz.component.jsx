@@ -18,6 +18,8 @@ import { Button, Container, Typography } from '@mui/material';
 import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
 import { useCallbackPrompt } from '../../hooks/useCallbackPrompt';
 import ConfirmQuitDialog from '../../components/confirm-quit-dialog.component';
+import { selectCategoryById } from '../../store/categories/categories.selectors';
+import { calculateCorrectAnswersAmount, getQuestionsAnswered } from '../../utils/questions.utils';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
@@ -33,7 +35,7 @@ const Quiz = () => {
   const quizResult = useSelector(selectQuizResult);
   const quizResultError = useSelector(selectQuizResultError);
   const quiz = useSelector(state => selectQuizById(state, quizId));
-
+  const category = useSelector(state => selectCategoryById(state, categoryId));
 
   const navigate = useNavigate();
 
@@ -56,7 +58,7 @@ const Quiz = () => {
       if(quizResultError) {
         //TODO: handle error
       } else {
-        navigate(`/result/${currentUser.uid}/${quizResult.id}`);
+        navigate(`/quiz-results/${currentUser.uid}/${quizResult.id}`);
       }
     }
   }, [isQuizResultSubmitting, isQuizResultDispatched]);
@@ -70,12 +72,17 @@ const Quiz = () => {
       return;
     }
 
+    const correctAnswersAmount = calculateCorrectAnswersAmount(getQuestionsAnswered(questions, userQuizAnswers));
+
     let quizResult = {
       quizId,
       categoryId,
       date: new Date().getTime(),
-      answers: userQuizAnswers
-    }
+      answers: userQuizAnswers,
+      quizTitle: quiz.title,
+      categoryTitle: category.title,
+      correctAnswersAmount
+    };
 
     setIsQuizResultDispatched(true);
     dispatch(submitQuizResultAsync(currentUser.uid, quizResult));

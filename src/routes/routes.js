@@ -1,12 +1,13 @@
 import Home from './home/home.component';
-import Profile from './profile/profile.component';
+import QuizResultsPage from './quiz-results-page/quiz-results-page.component';
 import Authentication from './authentication/authentication.component';
 import QuizResult from './quiz-result/quiz-result.component';
 import Category from './category/category.component';
 import Quiz from './quiz/quiz.component';
-import CategoryBreadcrumb from '../components/category-breadcrumb.component';
-import QuizBreadcrumb from '../components/quiz-breadcrumb.component';
-import HomeBreadcrumb from '../components/home-breadcrumb.component';
+import CategoryBreadcrumb from '../components/breadcrumbs/category-breadcrumb.component';
+import QuizBreadcrumb from '../components/breadcrumbs/quiz-breadcrumb.component';
+import HomeBreadcrumb from '../components/breadcrumbs/home-breadcrumb.component';
+import QuizResultsBreadcrumb from '../components/breadcrumbs/quiz-results-breadcrumb.component';
 
 export const routes = [
   {
@@ -15,9 +16,9 @@ export const routes = [
     breadcrumb: HomeBreadcrumb
   },
   {
-    path: 'profile',
-    element: <Profile />,
-    breadcrumb: 'Profile'
+    path: 'quiz-results',
+    element: <QuizResultsPage />,
+    breadcrumb: QuizResultsBreadcrumb
   },
   {
     path: 'auth',
@@ -25,7 +26,7 @@ export const routes = [
     breadcrumb: 'Authentication'
   },
   {
-    path: 'result/:userId/:quizResultId',
+    path: 'quiz-results/:userId/:quizResultId',
     element: <QuizResult />,
     breadcrumb: 'Quiz Result'
   },
@@ -39,4 +40,5 @@ export const routes = [
     element: <Quiz />,
     breadcrumb: QuizBreadcrumb
   },
+  //TODO: 404
 ]

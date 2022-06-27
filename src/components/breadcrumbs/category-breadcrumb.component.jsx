@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import { selectCategoryById } from '../store/categories/categories.selectors';
 import { Link, useMatch } from 'react-router-dom';
 import { Home } from '@mui/icons-material';
 import { Typography } from '@mui/material';
+import { selectCategoryById } from '../../store/categories/categories.selectors';
 
 const CategoryBreadcrumb = ({match}) => {
   const category = useSelector((state) => selectCategoryById(state, match.params.categoryId));

@@ -9,8 +9,8 @@ import { selectQuestionsByQuiz } from '../../store/questions/questions.selectors
 import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
 import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
 import QuestionAnswered from '../../components/question-answered/question-answered.component';
-import { calculateCorrectAnswersAmount, getQuestionsAnswered } from '../../utils/questions.utils';
-import { Chip, Container, Grid, Paper, Typography } from '@mui/material';
+import { getQuestionsAnswered } from '../../utils/questions.utils';
+import { Container, Grid, Paper, Typography } from '@mui/material';
 import ScoreStars from '../../components/score-stars.component';
 
 const QuizResult = () => {
@@ -20,7 +20,6 @@ const QuizResult = () => {
   const quiz = useSelector(state => selectQuizById(state, quizResult?.quizId));
   const questions = useSelector(state => selectQuestionsByQuiz(state, quizResult?.quizId));
   const [ questionsAnswered, setQuestionsAnswered ] = useState([]);
-  const [ amountOfCorrectAnswers, setAmountOfCorrectAnswers ] = useState(0);
 
   useEffect(() => {
     if(!quizResult?.id) {
@@ -45,13 +44,6 @@ const QuizResult = () => {
     }
   }, [questions, quizResult]);
 
-  useEffect(() => {
-    if(questionsAnswered.length > 0) {
-      const res = calculateCorrectAnswersAmount(questionsAnswered);
-      setAmountOfCorrectAnswers(res);
-    }
-  }, [questionsAnswered]);
-
   return (
     <Container>
       {
@@ -62,8 +54,8 @@ const QuizResult = () => {
                 <Typography variant="h3" mt={3}>{quiz.title} Quiz Result</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" mt={3}>Score: {amountOfCorrectAnswers} of {questionsAnswered.length}</Typography>
-                <ScoreStars correctAmount={amountOfCorrectAnswers} totalAmount={questionsAnswered.length} />
+                <Typography variant="h6" mt={3}>Score: {quizResult?.correctAnswersAmount} of {questionsAnswered.length}</Typography>
+                <ScoreStars correctAmount={quizResult?.correctAnswersAmount} totalAmount={questionsAnswered.length} />
               </Grid>
             </Grid>
 

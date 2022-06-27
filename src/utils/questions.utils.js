@@ -16,12 +16,4 @@ export const getQuestionsAnswered = (questions, userAnswers) => {
 export const calculateCorrectAnswersAmount = (questionsAnswered) => {
   return questionsAnswered.reduce((acc, qAnswered) => qAnswered.isCorrectlyAnswered ? acc + 1 : acc, 0);
 };
-//isCorrect = true - this is correct answer - style with green borders
-//isSelectedByUser && isCorrect - user gave correct answer - style with green background + check mark
-//isSelectedByUser && !isCorrect - user gave wrong answer - style with red background + cross mark
 
-export const getQuizResultsTableData = (quizResults, categories, quizzes) => {
-  return quizResults.map(quizResult => {
-    // const category = ;
-  });
-}

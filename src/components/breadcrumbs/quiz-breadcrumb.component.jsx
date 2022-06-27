@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { selectQuizById } from '../store/quizzes/quizzes.selectors';
 import { Typography } from '@mui/material';
+import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
 
 const QuizBreadcrumb = ({match}) => {
   const quiz = useSelector((state) => selectQuizById(state, match.params.quizId));
