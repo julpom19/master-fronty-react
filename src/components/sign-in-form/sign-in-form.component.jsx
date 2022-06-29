@@ -2,7 +2,7 @@ import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { signInUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase-auth.utils';
 import GoogleIcon from '@mui/icons-material/Google';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 const defaultFormFields = {
   email: '',
@@ -13,6 +13,8 @@ const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -48,8 +50,12 @@ const SignInForm = () => {
 
   const signInWithGoogle = async () => {
     await signInWithGooglePopup();
-    navigate('/');
+    redirect();
   };
+
+  const redirect = () => {
+    navigate(from, { replace: true });
+  }
 
   return (
     <Paper sx={{margin: "20px", padding: "20px"}}>
@@ -76,7 +82,7 @@ const SignInForm = () => {
             sx={{marginTop: "20px"}}
           />
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'end', marginTop: "20px" }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: "20px" }}>
           <Button
             variant="outlined"
             onClick={signInWithGoogle}

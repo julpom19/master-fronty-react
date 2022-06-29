@@ -1,17 +1,17 @@
 export const CATEGORIES = {
   js: {
-    title: 'Javascript',
-    icon: '',
+    title: 'JS',
+    icon: 'https://i.ibb.co/gzB0n6f/javascript.png',
     showable: true
   },
   css: {
     title: 'CSS',
-    icon: '',
+    icon: 'https://i.ibb.co/L6987L8/css.png',
     showable: true
   },
   html: {
     title: 'HTML',
-    icon: '',
+    icon: 'https://i.ibb.co/FxbrD8d/html.png',
     showable: true
   }
 };

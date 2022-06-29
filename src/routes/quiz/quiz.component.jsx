@@ -21,6 +21,7 @@ import ConfirmQuitDialog from '../../components/confirm-quit-dialog.component';
 import { selectCategoryById } from '../../store/categories/categories.selectors';
 import { calculateCorrectAnswersAmount, getQuestionsAnswered } from '../../utils/questions.utils';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
+import { useLocation } from 'react-router';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
@@ -40,6 +41,7 @@ const Quiz = () => {
   const isLoading = useSelector(selectQuestionsIsLoading);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [showPrompt, confirmNavigation, cancelNavigation] =
     useCallbackPrompt(preventPageLeave);
@@ -64,6 +66,12 @@ const Quiz = () => {
       }
     }
   }, [isQuizResultSubmitting, isQuizResultDispatched]);
+
+  useEffect(() => {
+    if(!currentUser) {
+      navigate('/auth', {replace: true, state: {from: location}});
+    }
+  }, [currentUser]);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();

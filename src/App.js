@@ -8,6 +8,7 @@ import { setCurrentUser } from './store/user/user.actions';
 import Footer from './components/footer/footer.component';
 import { Box, Grid } from '@mui/material';
 import { routes } from './routes/routes';
+import ThemeProvider from './theme/theme-provider';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -27,23 +28,25 @@ const App = () => {
     // loadDataToFirestore();
   }, []);
   return (
-    <Grid
-      container
-      justifyContent="space-between"
-      flexDirection="column"
-      sx={{minHeight: "100vh"}}
-    >
-      <Box>
-        <Routes>
-          <Route path="/" element={<Header />} >
-            {routes.map(route =>
-              <Route path={route.path} element={route.element} key={route.path}/>
-            )}
-          </Route>
-        </Routes>
-      </Box>
-      <Footer />
-    </Grid>
+    <ThemeProvider>
+      <Grid
+        container
+        justifyContent="space-between"
+        flexDirection="column"
+        sx={{minHeight: "100vh"}}
+      >
+        <Box>
+          <Routes>
+            <Route path="/" element={<Header />} >
+              {routes.map(route =>
+                <Route path={route.path} element={route.element} key={route.path}/>
+              )}
+            </Route>
+          </Routes>
+        </Box>
+        <Footer />
+      </Grid>
+    </ThemeProvider>
   );
 }
 

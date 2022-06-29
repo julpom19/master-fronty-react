@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import {
+  Box,
   Button,
   Card, CardActionArea,
-  CardContent,
+  CardContent, CardMedia,
   Typography,
 } from '@mui/material';
 import './category-card.styles.scss';
@@ -17,10 +18,13 @@ const CategoryCard = ({ category }) => {
     <Card
       onClick={handleCardClick}
       className='category-card'
+      elevation={6}
+      sx={{padding: "0 20px"}}
     >
-      <CardActionArea>
-        <CardContent>
-          <Typography variant="h6">
+      <CardActionArea sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: 150}}>
+        <CardContent sx={{display: "flex",alignItems: "center"}}>
+          <img src={category.icon} alt={category.title}/>
+          <Typography variant="h4" className="card-title" sx={{fontWeight: "bold", marginLeft: "20px"}}>
             {category.title}
           </Typography>
         </CardContent>

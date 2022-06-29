@@ -28,14 +28,20 @@ const Home = () => {
 
   return (
     <Container>
-      <Typography variant="h3" mt={2} textAlign="center" fontWeight="bold">
+      <Typography variant="h3" mt={6} textAlign="center" fontWeight="bold">
         Train yourself to master the force of coding!
+      </Typography>
+      <Typography mt={2} textAlign="center" sx={{fontSize: 18}}>
+        Take quizzes to test your knowledge in the world of frontend development.
+        Discover your strengths and weaknesses in order to improve your professional skills
       </Typography>
       {isLoading && <LoadingSpinner />}
       <Grid
         container
         spacing={2}
-        mt={1}
+        mt={6}
+        mb={2}
+        justifyContent="space-around"
       >
         {renderedCategories}
       </Grid>
