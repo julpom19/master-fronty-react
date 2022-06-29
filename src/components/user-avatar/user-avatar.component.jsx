@@ -16,7 +16,8 @@ const UserAvatar = () => {
     await signOutUser();
   };
   const signInHandler = async () => {
-    await signInWithGooglePopup();
+    navigate('/auth');
+    // await signInWithGooglePopup();
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -77,7 +78,7 @@ const UserAvatar = () => {
           <Button
             variant="outlined"
             onClick={signInHandler}>
-            SIGN IN
+            LOG IN
           </Button>
         )
       }

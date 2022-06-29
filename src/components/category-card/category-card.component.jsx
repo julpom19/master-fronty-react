@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import {
+  Button,
   Card, CardActionArea,
   CardContent,
   Typography,
@@ -11,6 +12,7 @@ const CategoryCard = ({ category }) => {
   const handleCardClick = () => {
     navigate(`/${category.id}`);
   }
+
   return (
     <Card
       onClick={handleCardClick}

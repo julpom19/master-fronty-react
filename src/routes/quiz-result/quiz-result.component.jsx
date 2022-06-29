@@ -1,7 +1,7 @@
 import './quiz-result.styles';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectQuizResult } from '../../store/quiz-result/quiz-result.selectors';
+import { selectQuizResult, selectQuizResultIsLoading } from '../../store/quiz-result/quiz-result.selectors';
 import { useEffect, useState } from 'react';
 import { fetchQuizResultAsync } from '../../store/quiz-result/quiz-result.actions';
 import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
@@ -12,6 +12,7 @@ import QuestionAnswered from '../../components/question-answered/question-answer
 import { getQuestionsAnswered } from '../../utils/questions.utils';
 import { Container, Grid, Paper, Typography } from '@mui/material';
 import ScoreStars from '../../components/score-stars.component';
+import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
 
 const QuizResult = () => {
   const quizResult = useSelector(selectQuizResult);
@@ -20,6 +21,7 @@ const QuizResult = () => {
   const quiz = useSelector(state => selectQuizById(state, quizResult?.quizId));
   const questions = useSelector(state => selectQuestionsByQuiz(state, quizResult?.quizId));
   const [ questionsAnswered, setQuestionsAnswered ] = useState([]);
+  const isLoading = useSelector(selectQuizResultIsLoading);
 
   useEffect(() => {
     if(!quizResult?.id) {
@@ -46,6 +48,7 @@ const QuizResult = () => {
 
   return (
     <Container>
+      { isLoading && <LoadingSpinner /> }
       {
         questionsAnswered.length > 0 && (
           <>

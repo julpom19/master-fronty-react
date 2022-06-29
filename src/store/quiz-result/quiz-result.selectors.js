@@ -22,3 +22,10 @@ export const selectQuizResultError = createSelector(
   ],
   (quizResultSlice) => quizResultSlice.error
 );
+
+export const selectQuizResultIsLoading = createSelector(
+  [
+    selectQuizResultReducer
+  ],
+  (quizResultSlice) => quizResultSlice.isLoading
+);

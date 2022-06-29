@@ -9,3 +9,8 @@ export const selectQuestionsByQuiz = createSelector(
   ],
   (questionsSlice, quizId) => questionsSlice.questionsByQuiz[quizId] || []
 );
+
+export const selectQuestionsIsLoading = createSelector(
+  [selectQuestionsReducer],
+  (questionsSlice) => questionsSlice.isLoading
+)

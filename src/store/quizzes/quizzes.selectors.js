@@ -22,3 +22,8 @@ export const selectQuizById = createSelector(
     }
   }
 );
+
+export const selectQuizzesIsLoading = createSelector(
+  [selectQuizzesReducer],
+  (quizzesSlice) => quizzesSlice.isLoading
+);

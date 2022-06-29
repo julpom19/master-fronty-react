@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
-import { selectQuestionsByQuiz } from '../../store/questions/questions.selectors';
+import { selectQuestionsByQuiz, selectQuestionsIsLoading } from '../../store/questions/questions.selectors';
 import Question from '../../components/question/question.component';
 import { selectCurrentUser } from '../../store/user/user.selectors';
 import { submitQuizResultAsync } from '../../store/quiz-result/quiz-result.actions';
@@ -14,12 +14,13 @@ import {
 } from '../../store/quiz-result/quiz-result.selectors';
 import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
 import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
-import { Button, Container, Typography } from '@mui/material';
+import { Button, Container, LinearProgress, Typography } from '@mui/material';
 import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
 import { useCallbackPrompt } from '../../hooks/useCallbackPrompt';
 import ConfirmQuitDialog from '../../components/confirm-quit-dialog.component';
 import { selectCategoryById } from '../../store/categories/categories.selectors';
 import { calculateCorrectAnswersAmount, getQuestionsAnswered } from '../../utils/questions.utils';
+import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
@@ -36,6 +37,7 @@ const Quiz = () => {
   const quizResultError = useSelector(selectQuizResultError);
   const quiz = useSelector(state => selectQuizById(state, quizId));
   const category = useSelector(state => selectCategoryById(state, categoryId));
+  const isLoading = useSelector(selectQuestionsIsLoading);
 
   const navigate = useNavigate();
 
@@ -128,51 +130,59 @@ const Quiz = () => {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" mt={2}>{quiz?.title} Quiz</Typography>
-      <Typography variant="h5" mt={2} mb={2}>Question {currentQuestionNum} of {questions?.length}</Typography>
-      <form >
+    <>
+      { isQuizResultSubmitting && <LinearProgress /> }
+      <Container>
         {
-          questions[currentQuestionNum - 1] && <Question
-            key={questions[currentQuestionNum - 1].id}
-            question={questions[currentQuestionNum - 1]}
-            answerOnChangeHandler={answerOnChangeHandler}
-          />
+          isLoading ? <LoadingSpinner /> :
+            <>
+              <Typography variant="h4" mt={2}>{quiz?.title} Quiz</Typography>
+              <Typography variant="h5" mt={2} mb={2}>Question {currentQuestionNum} of {questions?.length}</Typography>
+              <form >
+                {
+                  questions[currentQuestionNum - 1] && <Question
+                    key={questions[currentQuestionNum - 1].id}
+                    question={questions[currentQuestionNum - 1]}
+                    answerOnChangeHandler={answerOnChangeHandler}
+                  />
+                }
+                <Button
+                  variant='contained'
+                  onClick={backOnClickHandler}
+                  sx={{marginRight: '20px'}}
+                  disabled={currentQuestionNum === 1}
+                >
+                  BACK
+                </Button>
+                {
+                  currentQuestionNum === questions.length ? (
+                    <Button
+                      onClick={onSubmitHandler}
+                      variant='contained'
+                      disabled={userQuizAnswers.length < questions.length || isQuizResultSubmitting}
+                    >
+                      SUBMIT
+                    </Button>
+                  ) : (
+                    <Button
+                      variant='contained'
+                      onClick={nextOnClickHandler}
+                      disabled={currentQuestionNum > userQuizAnswers.length}
+                    >
+                      NEXT
+                    </Button>
+                  )
+                }
+              </form>
+              <ConfirmQuitDialog
+                showDialog={showPrompt}
+                confirmNavigation={confirmNavigation}
+                cancelNavigation={cancelNavigation}
+              />
+            </>
         }
-        <Button
-          variant='contained'
-          onClick={backOnClickHandler}
-          sx={{marginRight: '20px'}}
-          disabled={currentQuestionNum === 1}
-        >
-          BACK
-        </Button>
-        {
-          currentQuestionNum === questions.length ? (
-            <Button
-              onClick={onSubmitHandler}
-              variant='contained'
-              disabled={userQuizAnswers.length < questions.length || isQuizResultSubmitting}
-            >
-              SUBMIT
-            </Button>
-          ) : (
-            <Button
-              variant='contained'
-              onClick={nextOnClickHandler}
-              disabled={currentQuestionNum > userQuizAnswers.length}
-            >
-              NEXT
-            </Button>
-          )
-        }
-      </form>
-      <ConfirmQuitDialog
-        showDialog={showPrompt}
-        confirmNavigation={confirmNavigation}
-        cancelNavigation={cancelNavigation}
-        />
-    </Container>
+      </Container>
+    </>
   );
 }
 
