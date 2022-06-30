@@ -2,8 +2,15 @@ import './quiz.styles.scss';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
-import { selectQuestionsByQuiz, selectQuestionsIsLoading } from '../../store/questions/questions.selectors';
+import {
+  fetchQuestionsByCategoryAndQuizAsync,
+  questionsByQuizErrorHandled,
+} from '../../store/questions/questions.actions';
+import {
+  selectQuestionsByQuiz,
+  selectQuestionsIsLoading,
+  selectQuestionsLoadingError,
+} from '../../store/questions/questions.selectors';
 import Question from '../../components/question/question.component';
 import { selectCurrentUser } from '../../store/user/user.selectors';
 import { submitQuizResultAsync } from '../../store/quiz-result/quiz-result.actions';
@@ -22,6 +29,7 @@ import { selectCategoryById } from '../../store/categories/categories.selectors'
 import { calculateCorrectAnswersAmount, getQuestionsAnswered } from '../../utils/questions.utils';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
 import { useLocation } from 'react-router';
+import { DBEntityNotFoundError } from '../../utils/errors.utils';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
@@ -39,6 +47,7 @@ const Quiz = () => {
   const quiz = useSelector(state => selectQuizById(state, quizId));
   const category = useSelector(state => selectCategoryById(state, categoryId));
   const isLoading = useSelector(selectQuestionsIsLoading);
+  const error = useSelector(selectQuestionsLoadingError)
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -72,6 +81,13 @@ const Quiz = () => {
       navigate('/auth', {replace: true, state: {from: location}});
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    if(error && error.name === DBEntityNotFoundError.name) {
+      navigate(`/${categoryId}`, {replace: true});
+      dispatch(questionsByQuizErrorHandled());
+    }
+  },[error]);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();

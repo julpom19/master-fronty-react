@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Header from './routes/header/header.component';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -41,6 +41,14 @@ const App = () => {
               {routes.map(route =>
                 <Route path={route.path} element={route.element} key={route.path}/>
               )}
+              {/*<Route*/}
+              {/*  path="*"*/}
+              {/*  element={*/}
+              {/*    <main style={{ padding: "1rem" }}>*/}
+              {/*      <p>There's nothing here!</p>*/}
+              {/*    </main>*/}
+              {/*  }*/}
+              {/*/>*/}
             </Route>
           </Routes>
         </Box>

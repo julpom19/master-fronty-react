@@ -17,6 +17,7 @@ import {
   getQuizResultsFromDocs,
   getQuizzesFromDocs,
 } from './firestore-data-converters';
+import { DBEntityNotFoundError } from '../errors.utils';
 
 initFirebaseApp();
 export const db = getFirestore();
@@ -30,7 +31,18 @@ export const getCategories = async () => {
   return getCategoriesFromDocs(querySnapshot.docs);
 };
 
+const checkCategoryExists = async (categoryId) => {
+  const docRef = doc(db, 'categories', categoryId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    throw new DBEntityNotFoundError(`Category ${categoryId} doesn't exist`);
+  }
+};
+
 export const getQuizzesByCategory = async (categoryId) => {
+  await checkCategoryExists(categoryId);
+
   const collectionRef = collection(db, `categories/${categoryId}/quizzes`);
   const q = query(collectionRef);
 
@@ -38,7 +50,19 @@ export const getQuizzesByCategory = async (categoryId) => {
   return getQuizzesFromDocs(querySnapshot.docs);
 };
 
+const checkQuizExists = async (categoryId, quizId) => {
+  const docRef = doc(db, `categories/${categoryId}/quizzes/`, quizId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    throw new DBEntityNotFoundError(`Quiz ${quizId} doesn't exist`);
+  }
+};
+
 export const getQuestionsByCategoryAndQuiz = async (categoryId, quizId) => {
+  await checkCategoryExists(categoryId);
+  await checkQuizExists(categoryId, quizId);
+
   const collectionRef = collection(db, `categories/${categoryId}/quizzes/${quizId}/questions`);
   const q = query(collectionRef);
 
@@ -91,7 +115,28 @@ export const getQuizResultsByUser = async (userId) => {
   return getQuizResultsFromDocs(querySnapshot.docs);
 };
 
+const checkIfUserExists = async (userId) => {
+  const docRef = doc(db, 'users', userId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    throw new DBEntityNotFoundError(`User ${userId} doesn't exist`);
+  }
+};
+
+const checkIfQuizResultExists = async (userId, quizResultId) => {
+  const docRef = doc(db, `users/${userId}/quiz_results`, quizResultId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    throw new DBEntityNotFoundError(`QuizResult ${quizResultId} doesn't exist`);
+  }
+};
+
 export const getQuizResultByUser = async (userId, quizResultId) => {
+  await checkIfUserExists(userId);
+  await checkIfQuizResultExists(userId, quizResultId);
+
   const docRef = doc(db, `users/${userId}/quiz_results`, quizResultId);
   const docSnapshot = await getDoc(docRef);
 

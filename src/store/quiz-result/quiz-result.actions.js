@@ -38,4 +38,7 @@ export const fetchQuizResultAsync = (userId, quizResultId) => async (dispatch) =
   } catch (error) {
     dispatch(fetchQuizResultFailed(error));
   }
-}
+};
+
+export const quizResultErrorHandled = () =>
+  createAction(QUIZ_RESULT_ACTION_TYPES.QUIZ_RESULT_ERROR_HANDLED);

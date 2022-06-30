@@ -24,4 +24,7 @@ export const fetchQuizzesByCategoryAsync = (categoryId) => async (dispatch, getS
   } catch (error) {
     dispatch(fetchQuizzesByCategoryFailed(error));
   }
-}
+};
+
+export const quizzesByCategoryErrorHandled = () =>
+  createAction(QUIZZES_ACTION_TYPES.QUIZZES_BY_CATEGORY_ERROR_HANDLED);

@@ -26,3 +26,6 @@ export const fetchQuestionsByCategoryAndQuizAsync = (categoryId, quizId) => asyn
     dispatch(fetchQuestionsByQuizFailed(error));
   }
 }
+
+export const questionsByQuizErrorHandled = () =>
+  createAction(QUESTIONS_ACTION_TYPES.QUESTIONS_BY_QUIZ_ERROR_HANDLED);

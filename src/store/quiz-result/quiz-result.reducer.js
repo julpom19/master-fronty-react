@@ -14,6 +14,7 @@ const quizResultReducer = (state = INITIAL_STATE, action = {}) => {
     case QUIZ_RESULT_ACTION_TYPES.SUBMIT_QUIZ_RESULT_START:
       return {
         ...state,
+        error: null,
         isSubmitting: true
       };
     case QUIZ_RESULT_ACTION_TYPES.SUBMIT_QUIZ_RESULT_SUCCESS:
@@ -37,6 +38,7 @@ const quizResultReducer = (state = INITIAL_STATE, action = {}) => {
     case QUIZ_RESULT_ACTION_TYPES.FETCH_QUIZ_RESULT_START:
       return {
         ...state,
+        error: null,
         isLoading: true
       };
     case QUIZ_RESULT_ACTION_TYPES.FETCH_QUIZ_RESULT_SUCCESS:
@@ -52,6 +54,11 @@ const quizResultReducer = (state = INITIAL_STATE, action = {}) => {
         error: payload,
         isLoading: false
       }
+    case QUIZ_RESULT_ACTION_TYPES.QUIZ_RESULT_ERROR_HANDLED:
+      return {
+        ...state,
+        error: null
+      };
     default:
       return state;
   }

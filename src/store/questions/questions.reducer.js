@@ -13,6 +13,7 @@ const questionsReducer = (state = INITIAL_STATE, action = {}) => {
     case QUESTIONS_ACTION_TYPES.FETCH_QUESTIONS_BY_QUIZ_START:
       return {
         ...state,
+        error: null,
         isLoading: true,
       };
     case QUESTIONS_ACTION_TYPES.FETCH_QUESTIONS_BY_QUIZ_SUCCESS:
@@ -22,6 +23,7 @@ const questionsReducer = (state = INITIAL_STATE, action = {}) => {
           ...state.questionsByQuiz,
           ...payload
         },
+        error: null,
         isLoading: false
       };
     case QUESTIONS_ACTION_TYPES.FETCH_QUESTIONS_BY_QUIZ_FAILED:
@@ -29,6 +31,11 @@ const questionsReducer = (state = INITIAL_STATE, action = {}) => {
         ...state,
         isLoading: false,
         error: payload
+      };
+    case QUESTIONS_ACTION_TYPES.QUESTIONS_BY_QUIZ_ERROR_HANDLED:
+      return {
+        ...state,
+        error: null
       };
     default:
       return state;

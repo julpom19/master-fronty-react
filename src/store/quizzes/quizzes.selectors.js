@@ -27,3 +27,8 @@ export const selectQuizzesIsLoading = createSelector(
   [selectQuizzesReducer],
   (quizzesSlice) => quizzesSlice.isLoading
 );
+
+export const selectQuizzesLoadingError = createSelector(
+  [selectQuizzesReducer],
+  (quizzesSlice) => quizzesSlice.error
+);

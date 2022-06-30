@@ -13,12 +13,14 @@ const quizResultsReducer = (state = INITIAL_STATE, action = {}) => {
     case QUIZ_RESULTS_ACTION_TYPES.FETCH_QUIZ_RESULTS_START:
       return {
         ...state,
+        error: null,
         isLoading: true
       };
     case QUIZ_RESULTS_ACTION_TYPES.FETCH_QUIZ_RESULTS_SUCCESS:
       return {
         ...state,
         quizResults: payload, //TODO: add caching
+        error: null,
         isLoading: false
       };
     case QUIZ_RESULTS_ACTION_TYPES.FETCH_QUIZ_RESULTS_FAILED:

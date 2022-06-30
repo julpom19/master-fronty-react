@@ -8,6 +8,7 @@ import CategoryBreadcrumb from '../components/breadcrumbs/category-breadcrumb.co
 import QuizBreadcrumb from '../components/breadcrumbs/quiz-breadcrumb.component';
 import HomeBreadcrumb from '../components/breadcrumbs/home-breadcrumb.component';
 import QuizResultsBreadcrumb from '../components/breadcrumbs/quiz-results-breadcrumb.component';
+import { Navigate } from 'react-router-dom';
 
 export const routes = [
   {
@@ -40,5 +41,8 @@ export const routes = [
     element: <Quiz />,
     breadcrumb: QuizBreadcrumb
   },
-  //TODO: 404
+  {
+    path: '*',
+    element: <Navigate to="/" replace={true} />,
+  }
 ]
