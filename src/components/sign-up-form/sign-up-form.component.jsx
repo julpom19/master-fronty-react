@@ -1,7 +1,9 @@
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { createUserDocumentFromAuth } from '../../utils/firebase/firebase-store.utils';
 import { createAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase-auth.utils';
 import { useState } from 'react';
+import PasswordInput from '../password-input/password-input.component';
+import { useNavigate } from 'react-router';
 
 const defaultFormFields = {
   displayName: '',
@@ -10,9 +12,11 @@ const defaultFormFields = {
   confirmPassword: ''
 };
 
-const SignUpForm = () => {
+const SignUpForm = ({ redirectLocation }) => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
+  const [ errorMsg, setErrorMsg ] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -30,7 +34,7 @@ const SignUpForm = () => {
     event.preventDefault();
 
     if(password !== confirmPassword) {
-      alert('Password confirmation error');
+      setErrorMsg('Password confirmation error');
       return;
     }
 
@@ -41,12 +45,23 @@ const SignUpForm = () => {
         ...userAuth,
         displayName
       }
-      const userDocRef = await createUserDocumentFromAuth(user);
-      resetFormFields();
+      await createUserDocumentFromAuth(user);
+      redirect();
     } catch (error) {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          setErrorMsg('This email is already in use');
+          break;
+        default:
+          setErrorMsg('Can not register user. Please, try later');
+      }
       console.log('Error with user\'s sign up', error);
     }
   };
+
+  const redirect = () => {
+    navigate(redirectLocation, { replace: true });
+  }
 
   return (
     <Paper sx={{margin: "20px", padding: "20px"}}>
@@ -71,31 +86,22 @@ const SignUpForm = () => {
             variant="outlined"
             sx={{marginTop: "20px"}}
           />
-          <TextField
-            label="Password"
-            required
-            type="password"
-            value={password}
-            name="password"
-            onChange={handleChange}
-            variant="outlined"
-            sx={{marginTop: "20px"}}
-            minLength="6"
+          <PasswordInput
+          label={"Password *"}
+          value={password}
+          handleChange={handleChange}
+          name={"password"}
           />
-          <TextField
-            label="Confirm Password"
-            required
-            type="password"
+          <PasswordInput
+            label={"Confirm Password *"}
             value={confirmPassword}
-            name="confirmPassword"
-            onChange={handleChange}
-            variant="outlined"
-            sx={{marginTop: "20px"}}
-            minLength="6"
+            handleChange={handleChange}
+            name={"confirmPassword"}
           />
+          {!!errorMsg && <Alert severity="error" sx={{marginTop: "10px"}}>{errorMsg}</Alert>}
         </Box>
         <Box sx={{marginTop: "20px", display: "flex", justifyContent: "end"}}>
-          <Button variant="outlined" >
+          <Button variant="outlined" type="submit">
             Sign up
           </Button>
         </Box>

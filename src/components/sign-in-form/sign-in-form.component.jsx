@@ -1,20 +1,21 @@
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { signInUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase-auth.utils';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useLocation, useNavigate } from 'react-router';
+import PasswordInput from '../password-input/password-input.component';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const defaultFormFields = {
   email: '',
   password: ''
 };
 
-const SignInForm = () => {
+const SignInForm = ({ redirectLocation }) => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const [ errorMsg, setErrorMsg ] = useState(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -33,14 +34,14 @@ const SignInForm = () => {
 
     try {
       await signInUserWithEmailAndPassword(email, password);
-      resetFormFields();
+      redirect();
     } catch (error) {
       switch(error.code) {
         case 'auth/wrong-password':
-          alert('Incorrect password for email');
+          setErrorMsg(`Password doesn't match to email`);
           break;
         case 'auth/user-not-found':
-          alert('Email not registered');
+          setErrorMsg('A user with this email does not exist');
           break;
         default:
           console.error(error);
@@ -54,13 +55,13 @@ const SignInForm = () => {
   };
 
   const redirect = () => {
-    navigate(from, { replace: true });
+    navigate(redirectLocation, { replace: true });
   }
 
   return (
     <Paper sx={{margin: "20px", padding: "20px"}}>
       <Typography variant="h6" mb={3}>Sign in with your email and password</Typography>
-      <form>
+      <form onSubmit={submitHandler}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <TextField
             label="Email"
@@ -71,31 +72,27 @@ const SignInForm = () => {
             onChange={handleChange}
             variant="outlined"
           />
-          <TextField
-            label="Password"
-            required
-            type="password"
+          <PasswordInput
+            label={"Password *"}
             value={password}
-            name="password"
-            onChange={handleChange}
-            variant="outlined"
-            sx={{marginTop: "20px"}}
+            handleChange={handleChange}
+            name={"password"}
           />
+          {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: "20px" }}>
-          <Button
+          <LoadingButton
             variant="outlined"
             onClick={signInWithGoogle}
             sx={{marginRight: "20px"}}
             startIcon={<GoogleIcon />}
           >
             Log in with Google
-          </Button>
-          <Button variant="outlined">
+          </LoadingButton>
+          <LoadingButton variant="outlined" type="submit">
             Log in
-          </Button>
+          </LoadingButton>
         </Box>
-
       </form>
     </Paper>
   );
