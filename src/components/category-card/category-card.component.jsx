@@ -1,9 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import {
-  Box,
-  Button,
-  Card, CardActionArea,
-  CardContent, CardMedia,
+  Card,
+  CardActionArea,
+  CardContent,
   Typography,
 } from '@mui/material';
 import './category-card.styles.scss';

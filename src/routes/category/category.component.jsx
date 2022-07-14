@@ -1,20 +1,23 @@
-import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
-import './category.styles.scss';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchQuizzesByCategoryAsync, quizzesByCategoryErrorHandled } from '../../store/quizzes/quizzes.actions';
 import {
   selectQuizzesByCategory,
   selectQuizzesIsLoading,
   selectQuizzesLoadingError,
 } from '../../store/quizzes/quizzes.selectors';
-import { Container, Grid } from '@mui/material';
 import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
+
+import { DBEntityNotFoundError } from '../../utils/errors.utils';
+
+import { Container, Grid } from '@mui/material';
 import QuizCard from '../../components/quiz-card/quiz-card.component';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
-import { useNavigate } from 'react-router';
-import { DBEntityNotFoundError } from '../../utils/errors.utils';
+
+import './category.styles.scss';
 
 const Category = () => {
   const { categoryId } = useParams();
@@ -39,7 +42,6 @@ const Category = () => {
   return (
     <Container>
       { isLoading && <LoadingSpinner /> }
-      {/*{error.toString()}*/}
       <Grid container spacing={2} mt={1}>
         {quizzes?.map(q =>
           <Grid item md={3} sm={4} xs={6} key={q.id}>

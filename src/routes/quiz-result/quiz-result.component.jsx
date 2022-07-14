@@ -27,7 +27,7 @@ const QuizResult = () => {
   const quiz = useSelector(state => selectQuizById(state, quizResult?.quizId));
   const questions = useSelector(state => selectQuestionsByQuiz(state, quizResult?.quizId));
   const [ questionsAnswered, setQuestionsAnswered ] = useState([]);
-  const isLoading = useSelector(selectQuizResultIsLoading);
+  const isLoading = useSelector(selectQuizResultIsLoading); //TODO: make computed
   const error = useSelector(selectQuizResultError);
   const navigate = useNavigate();
 

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../store/user/user.selectors';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithGooglePopup, signOutUser } from '../../utils/firebase/firebase-auth.utils';
+import { signOutUser } from '../../utils/firebase/firebase-auth.utils';
 
 const UserAvatar = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -17,7 +17,6 @@ const UserAvatar = () => {
   };
   const signInHandler = async () => {
     navigate('/auth');
-    // await signInWithGooglePopup();
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);

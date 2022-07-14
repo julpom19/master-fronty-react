@@ -38,6 +38,7 @@ const Quiz = () => {
   const [ currentQuestionNum, setCurrentQuestionNum ] = useState(1);
   const [ questions, setQuestions ] = useState([]);
   const [ preventPageLeave, setPreventPageLeave ] = useState(false);
+
   const dispatch = useDispatch();
   const questionsFromState = useSelector(state => selectQuestionsByQuiz(state, quizId));
   const currentUser = useSelector(selectCurrentUser);
@@ -162,7 +163,7 @@ const Quiz = () => {
             <>
               <Typography variant="h4" mt={2}>{quiz?.title} Quiz</Typography>
               <Typography variant="h5" mt={2} mb={2}>Question {currentQuestionNum} of {questions?.length}</Typography>
-              <form >
+              <form>
                 {
                   questions[currentQuestionNum - 1] && <Question
                     key={questions[currentQuestionNum - 1].id}

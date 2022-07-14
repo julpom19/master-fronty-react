@@ -23,7 +23,6 @@ const ScoreStars = ({ correctAmount, totalAmount }) => {
       }}
     >
       <Rating
-        name="text-feedback"
         value={value}
         readOnly
         precision={0.5}

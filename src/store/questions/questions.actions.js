@@ -14,7 +14,7 @@ const fetchQuestionsByQuizFailed = (error) =>
   createAction(QUESTIONS_ACTION_TYPES.FETCH_QUESTIONS_BY_QUIZ_FAILED, error);
 
 export const fetchQuestionsByCategoryAndQuizAsync = (categoryId, quizId) => async (dispatch, getState) => {
-  if(getState().questions.questionsByQuiz?.length > 0) {
+  if(getState().questions.questionsByQuiz?.length > 0) { //TODO: BUG
     return Promise.resolve();
   }
 

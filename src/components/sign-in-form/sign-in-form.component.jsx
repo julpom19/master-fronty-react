@@ -1,8 +1,8 @@
-import { Alert, Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { Alert, Box, Paper, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { signInUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase-auth.utils';
 import GoogleIcon from '@mui/icons-material/Google';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import PasswordInput from '../password-input/password-input.component';
 import LoadingButton from '@mui/lab/LoadingButton';
 

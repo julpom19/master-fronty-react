@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
 import { Link, useMatch } from 'react-router-dom';
-import { Home } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { selectCategoryById } from '../../store/categories/categories.selectors';
 

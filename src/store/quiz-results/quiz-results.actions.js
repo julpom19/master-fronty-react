@@ -12,7 +12,7 @@ const fetchQuizResultsFailed = (error) =>
   createAction(QUIZ_RESULTS_ACTION_TYPES.FETCH_QUIZ_RESULTS_FAILED, error);
 
 export const fetchQuizResultsAsync = (userId) => async (dispatch, getState) => {
-  if(getState().quizResults.quizResults)
+  // if(getState().quizResults.quizResults) //TODO BUG
   dispatch(fetchQuizResultsStart());
   try {
     const quizResults = await getQuizResultsByUser(userId);

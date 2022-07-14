@@ -17,7 +17,6 @@ const App = () => {
       if (user) {
         createUserDocumentFromAuth(user);
       }
-
       dispatch(setCurrentUser(user));
     });
 
@@ -41,14 +40,6 @@ const App = () => {
               {routes.map(route =>
                 <Route path={route.path} element={route.element} key={route.path}/>
               )}
-              {/*<Route*/}
-              {/*  path="*"*/}
-              {/*  element={*/}
-              {/*    <main style={{ padding: "1rem" }}>*/}
-              {/*      <p>There's nothing here!</p>*/}
-              {/*    </main>*/}
-              {/*  }*/}
-              {/*/>*/}
             </Route>
           </Routes>
         </Box>

@@ -10,6 +10,7 @@ import UserAvatar from '../../components/user-avatar/user-avatar.component';
 import HeaderNavigation from '../../components/header-navigation/header-navigation.component';
 
 const Header = () => {
+  console.log('header render')
   return (
     <>
       <AppBar position="sticky">
@@ -20,7 +21,7 @@ const Header = () => {
           }}
         >
           <Link to="/">
-            <img src={logo} width="100"/>
+            <img src={logo} alt="logo" width="100"/>
           </Link>
           <HeaderNavigation />
           <UserAvatar />
