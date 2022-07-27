@@ -1,4 +1,4 @@
-import './qestion.styles.scss';
+import { memo } from 'react';
 import {
   Paper,
   Typography,
@@ -29,4 +29,4 @@ const Question = ({ question, answerOnChangeHandler }) => {
   );
 };
 
-export default Question;
+export default memo(Question);

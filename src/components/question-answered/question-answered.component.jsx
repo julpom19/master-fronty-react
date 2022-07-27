@@ -1,6 +1,6 @@
 import './question-answered.styles.scss';
 import { Chip, Divider, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 
 const QuestionAnswered = ({ questionAnswered, questionIndex }) => {
   questionAnswered.answers.forEach(a => {
@@ -36,4 +36,4 @@ const QuestionAnswered = ({ questionAnswered, questionIndex }) => {
     </Paper>
   );
 }
-export default QuestionAnswered;
+export default memo(QuestionAnswered);

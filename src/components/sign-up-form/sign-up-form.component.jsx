@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { createUserDocumentFromAuth } from '../../utils/firebase/firebase-store.utils';
 import { createAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase-auth.utils';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import PasswordInput from '../password-input/password-input.component';
 import { useNavigate } from 'react-router';
 

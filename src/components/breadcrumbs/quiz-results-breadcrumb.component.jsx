@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
@@ -14,4 +15,4 @@ const QuizResultsBreadcrumb = ({match}) => {
   }
 };
 
-export default QuizResultsBreadcrumb;
+export default memo(QuizResultsBreadcrumb);

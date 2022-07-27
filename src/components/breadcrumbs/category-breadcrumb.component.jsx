@@ -1,11 +1,16 @@
+import { memo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useMatch } from 'react-router-dom';
-import { Typography } from '@mui/material';
+
 import { selectCategoryById } from '../../store/categories/categories.selectors';
 
+import { Typography } from '@mui/material';
+
 const CategoryBreadcrumb = ({match}) => {
-  const category = useSelector((state) => selectCategoryById(state, match.params.categoryId));
   const matchRes = useMatch(match.pathname);
+
+  const category = useSelector((state) => selectCategoryById(state, match.params.categoryId));
+
   if(matchRes) {
     return <Typography>{category?.title}</Typography>;
   } else {
@@ -13,4 +18,4 @@ const CategoryBreadcrumb = ({match}) => {
   }
 };
 
-export default CategoryBreadcrumb;
+export default memo(CategoryBreadcrumb);

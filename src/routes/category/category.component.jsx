@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 
@@ -16,8 +16,6 @@ import { DBEntityNotFoundError } from '../../utils/errors.utils';
 import { Container, Grid } from '@mui/material';
 import QuizCard from '../../components/quiz-card/quiz-card.component';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
-
-import './category.styles.scss';
 
 const Category = () => {
   const { categoryId } = useParams();

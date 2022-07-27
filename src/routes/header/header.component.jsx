@@ -1,16 +1,16 @@
-import './header.styles.scss';
 import { Link, Outlet } from 'react-router-dom';
+
 import {
   AppBar,
   Toolbar,
 } from '@mui/material';
 import logo from '../../assets/logo-master-fronty.png';
 import UserAvatar from '../../components/user-avatar/user-avatar.component';
-
 import HeaderNavigation from '../../components/header-navigation/header-navigation.component';
 
+import './header.styles.scss';
+
 const Header = () => {
-  console.log('header render')
   return (
     <>
       <AppBar position="sticky">

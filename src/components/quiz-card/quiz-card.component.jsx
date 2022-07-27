@@ -1,16 +1,17 @@
+import { memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Card, CardActionArea,
   CardContent,
   Typography,
 } from '@mui/material';
-import './quiz-card.styles.scss';
 
 const QuizCard = ({ quiz, categoryId }) => {
   const navigate = useNavigate();
   const handleCardClick = () => {
     navigate(`/${categoryId}/${quiz.id}`);
-  }
+  };
+
   return (
     <Card
       onClick={handleCardClick}
@@ -27,4 +28,4 @@ const QuizCard = ({ quiz, categoryId }) => {
   );
 };
 
-export default QuizCard;
+export default memo(QuizCard);

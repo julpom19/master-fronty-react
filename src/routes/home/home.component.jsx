@@ -1,13 +1,11 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
 import { selectCategories, selectCategoriesIsLoading } from '../../store/categories/categories.selectors';
 
-import CategoryCard from '../../components/category-card/category-card.component';
-
-import './home.styles.scss';
-import { useEffect, useRef } from 'react';
-import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
 import { Container, Grid, Typography } from '@mui/material';
+import CategoryCard from '../../components/category-card/category-card.component';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
 
 const Home = () => {

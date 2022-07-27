@@ -1,5 +1,5 @@
 import { Alert, Box, Paper, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { signInUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase-auth.utils';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useNavigate } from 'react-router';
@@ -12,9 +12,9 @@ const defaultFormFields = {
 };
 
 const SignInForm = ({ redirectLocation }) => {
-  const [formFields, setFormFields] = useState(defaultFormFields);
-  const { email, password } = formFields;
   const navigate = useNavigate();
+  const [ formFields, setFormFields ] = useState(defaultFormFields);
+  const { email, password } = formFields;
   const [ errorMsg, setErrorMsg ] = useState(null);
 
   const handleChange = (event) => {
@@ -23,7 +23,7 @@ const SignInForm = ({ redirectLocation }) => {
       ...formFields,
       [name]: value
     });
-  };
+  }
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);

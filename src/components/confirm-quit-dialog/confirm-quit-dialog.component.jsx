@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 const ConfirmQuitDialog = ({ showDialog,  cancelNavigation, confirmNavigation, }) => {
@@ -17,4 +18,4 @@ const ConfirmQuitDialog = ({ showDialog,  cancelNavigation, confirmNavigation, }
   )
 };
 
-export default ConfirmQuitDialog;
+export default memo(ConfirmQuitDialog);

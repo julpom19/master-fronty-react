@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Card,
@@ -11,7 +12,7 @@ const CategoryCard = ({ category }) => {
   const navigate = useNavigate();
   const handleCardClick = () => {
     navigate(`/${category.id}`);
-  }
+  };
 
   return (
     <Card
@@ -32,4 +33,4 @@ const CategoryCard = ({ category }) => {
   );
 };
 
-export default CategoryCard;
+export default memo(CategoryCard);

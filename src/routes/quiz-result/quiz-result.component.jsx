@@ -1,35 +1,40 @@
-import './quiz-result.styles';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   selectQuizResult,
   selectQuizResultError,
   selectQuizResultIsLoading,
 } from '../../store/quiz-result/quiz-result.selectors';
-import { useEffect, useState } from 'react';
-import { fetchQuizResultAsync, quizResultErrorHandled } from '../../store/quiz-result/quiz-result.actions';
 import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
 import { selectQuestionsByQuiz } from '../../store/questions/questions.selectors';
 import { fetchQuestionsByCategoryAndQuizAsync } from '../../store/questions/questions.actions';
 import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
-import QuestionAnswered from '../../components/question-answered/question-answered.component';
+import { fetchQuizResultAsync, quizResultErrorHandled } from '../../store/quiz-result/quiz-result.actions';
+
 import { getQuestionsAnswered } from '../../utils/questions.utils';
-import { Container, Grid, Paper, Typography } from '@mui/material';
-import ScoreStars from '../../components/score-stars.component';
-import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
 import { DBEntityNotFoundError } from '../../utils/errors.utils';
-import { useNavigate } from 'react-router';
+
+import { Container, Grid, Paper, Typography } from '@mui/material';
+import ScoreStars from '../../components/score-stars/score-stars.component';
+import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
+import QuestionAnswered from '../../components/question-answered/question-answered.component';
 
 const QuizResult = () => {
-  const quizResult = useSelector(selectQuizResult);
-  const { userId, quizResultId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { userId, quizResultId } = useParams();
+
+  const quizResult = useSelector(selectQuizResult);
   const quiz = useSelector(state => selectQuizById(state, quizResult?.quizId));
   const questions = useSelector(state => selectQuestionsByQuiz(state, quizResult?.quizId));
-  const [ questionsAnswered, setQuestionsAnswered ] = useState([]);
-  const isLoading = useSelector(selectQuizResultIsLoading); //TODO: make computed
+  const isLoading = useSelector(selectQuizResultIsLoading);
   const error = useSelector(selectQuizResultError);
-  const navigate = useNavigate();
+
+  const [ questionsAnswered, setQuestionsAnswered ] = useState([]);
 
   useEffect(() => {
     if(!quizResult?.id) {

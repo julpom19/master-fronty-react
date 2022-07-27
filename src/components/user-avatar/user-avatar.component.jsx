@@ -1,15 +1,18 @@
-import { Avatar, Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import { stringAvatar } from '../../utils/avatar.utils';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../store/user/user.selectors';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import { selectCurrentUser } from '../../store/user/user.selectors';
+
 import { signOutUser } from '../../utils/firebase/firebase-auth.utils';
+import { stringAvatar } from '../../utils/avatar.utils';
+
+import { Avatar, Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 
 const UserAvatar = () => {
+  const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const navigate = useNavigate();
 
   const signOutHandler = async () => {
     handleCloseUserMenu();
@@ -81,8 +84,6 @@ const UserAvatar = () => {
           </Button>
         )
       }
-
-
     </Box>
   );
 }

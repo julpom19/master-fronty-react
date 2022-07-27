@@ -1,35 +1,37 @@
-import './quiz.styles.scss';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   fetchQuestionsByCategoryAndQuizAsync,
   questionsByQuizErrorHandled,
 } from '../../store/questions/questions.actions';
+import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
+import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
+import { submitQuizResultAsync } from '../../store/quiz-result/quiz-result.actions';
 import {
   selectQuestionsByQuiz,
   selectQuestionsIsLoading,
   selectQuestionsLoadingError,
 } from '../../store/questions/questions.selectors';
-import Question from '../../components/question/question.component';
-import { selectCurrentUser } from '../../store/user/user.selectors';
-import { submitQuizResultAsync } from '../../store/quiz-result/quiz-result.actions';
 import {
   selectIsQuizResultSubmitting,
   selectQuizResult,
   selectQuizResultError,
 } from '../../store/quiz-result/quiz-result.selectors';
-import { fetchCategoriesAsync } from '../../store/categories/categories.actions';
-import { fetchQuizzesByCategoryAsync } from '../../store/quizzes/quizzes.actions';
-import { Button, Container, LinearProgress, Typography } from '@mui/material';
+import { selectCurrentUser } from '../../store/user/user.selectors';
 import { selectQuizById } from '../../store/quizzes/quizzes.selectors';
-import { useCallbackPrompt } from '../../hooks/useCallbackPrompt';
-import ConfirmQuitDialog from '../../components/confirm-quit-dialog.component';
 import { selectCategoryById } from '../../store/categories/categories.selectors';
+
+import { useCallbackPrompt } from '../../hooks/useCallbackPrompt';
 import { calculateCorrectAnswersAmount, getQuestionsAnswered } from '../../utils/questions.utils';
-import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
-import { useLocation } from 'react-router';
 import { DBEntityNotFoundError } from '../../utils/errors.utils';
+
+import { Button, Container, LinearProgress, Typography } from '@mui/material';
+import Question from '../../components/question/question.component';
+import ConfirmQuitDialog from '../../components/confirm-quit-dialog/confirm-quit-dialog.component';
+import LoadingSpinner from '../../components/loading-spinner/loading-spinner.component';
 
 const Quiz = () => {
   const { quizId, categoryId } = useParams();
@@ -113,14 +115,14 @@ const Quiz = () => {
 
     setIsQuizResultDispatched(true);
     dispatch(submitQuizResultAsync(currentUser.uid, quizResult));
-  }
+  };
 
-  const answerOnChangeHandler = (event) => {
+  const answerOnChangeHandler = useCallback((event) => {
     const { name, value } = event.target;
     addUserQuizAnswer(name, value);
     addAnswerToQuestions(name, value);
     setPreventPageLeave(true);
-  };
+  }, [questions, userQuizAnswers]);
 
   const addUserQuizAnswer = (questionId, answerId) => {
     let previousAnswer = userQuizAnswers.find(a => a.questionId === questionId);

@@ -24,10 +24,10 @@ const QuizResultsTable = () => {
     if(!quizResultsFromState || quizResultsFromState.length === 0) return;
     setQuizResults(
       quizResultsFromState.map((qResult, index) => {
-      qResult.index = index + 1;
-      qResult.score = qResult.correctAnswersAmount + ' of ' + qResult.answers.length;
-      qResult.date = new Date(qResult.date).toLocaleDateString("en-US");
-      return qResult;
+        qResult.index = index + 1;
+        qResult.score = qResult.correctAnswersAmount + ' of ' + qResult.answers.length;
+        qResult.date = new Date(qResult.date).toLocaleDateString("en-US");
+        return qResult;
     }));
   }, [quizResultsFromState]);
 

@@ -1,15 +1,17 @@
-import './quiz-results-page.styles.scss';
-import { Container, Typography } from '@mui/material';
-import QuizResultsTable from '../../components/quiz-results-table/quiz-results-table.component';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../store/user/user.selectors';
-import { useLocation, useNavigate } from 'react-router';
-import { useEffect } from 'react';
+
+import { Container, Typography } from '@mui/material';
+import QuizResultsTable from '../../components/quiz-results-table/quiz-results-table.component';
 
 const QuizResultsPage = () => {
-  const currentUser = useSelector(selectCurrentUser);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const currentUser = useSelector(selectCurrentUser);
 
   useEffect(() => {
     if(!currentUser) {

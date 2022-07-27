@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { Home } from '@mui/icons-material';
 
@@ -14,4 +15,4 @@ const HomeBreadcrumb = ({match}) => {
   }
 };
 
-export default HomeBreadcrumb;
+export default memo(HomeBreadcrumb);
